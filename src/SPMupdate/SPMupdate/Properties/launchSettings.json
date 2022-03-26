@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SPMupdate": {
+      "commandName": "Project",
+      "commandLineArgs": "ptb 1"
+    }
+  }
+}
