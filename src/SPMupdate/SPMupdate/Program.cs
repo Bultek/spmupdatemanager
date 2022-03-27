@@ -23,34 +23,55 @@ namespace SPMupdateManager
                     Console.WriteLine("====================================");
                     using (WebClient tagdl = new WebClient())
                     {
+                        if (System.IO.File.Exists("C:\\SPM.zip"))
+                        {
+                            System.IO.File.Delete("C:\\SPM.zip");
+                        }
                         //Console.WriteLine("Downloading versions info...");
                         tagdl.DownloadFile("http://repo.bultek.com.ua/SPM-BINARY/SPM-" + man.Branch + ".zip", "C:\\SPM.zip");
                         // Param1 = Link of file
                         // Param2 = Path to save
                     }
-                    Console.WriteLine("Extracting the update...");
+                    Console.WriteLine("====================================");
+                    Console.WriteLine("Warning: Please ensure that there are no running SPM instances!");
+                    Console.WriteLine("Do you want to update now? (Y/n)");
+                    string answer = Console.ReadLine();
+                    if (answer.ToLower().StartsWith("n"))
+                    {
+                        Console.WriteLine("====================================");
+                        Console.WriteLine("Update aborted!");
+                        Console.WriteLine("====================================");
+                        System.Environment.Exit(0);
+                    }
+                    else
+                    {
+                        Console.WriteLine("====================================");
+                        Console.WriteLine("Extracting the update...");
+                        Console.WriteLine("====================================");
+                    }
                     if (System.IO.Directory.Exists("C:\\SPM\\futureversion")) System.IO.Directory.Delete("C:\\SPM\\futureversion", true);
                     if (!System.IO.Directory.Exists("C:\\SPM\\futureversion"))
                     {
-                        System.IO.Directory.CreateDirectory("C:\\SPM\\futureversion");
-                        ZipFile.ExtractToDirectory("C:\\SPM.zip", "C:\\SPM\\futureversion");
+                        if (System.IO.Directory.Exists(@"C:\temp\SPM")) System.IO.Directory.Delete(@"C:\temp\", true);
+                        ZipFile.ExtractToDirectory("C:\\SPM.zip", "C:\\temp\\");
                     }
                     Console.WriteLine("====================================");
                     Console.WriteLine("Update extracted!");
                     Console.WriteLine("====================================");
+                    Console.WriteLine("====================================");
                     Console.WriteLine("Updating...");
-                    if (System.IO.Directory.Exists("C:\\SPM\\config.old")) System.IO.Directory.Delete("C:\\SPM\\config.old", true);
-                    System.IO.Directory.Move("C:\\SPM\\config", "C:\\SPM\\config.old");
-                    String[] files = Directory.GetFiles(@"C:\SPM\futureversion", "*", SearchOption.AllDirectories);
-                    foreach (string file in files)
-                    {
-                        System.IO.File.Copy(file, file.Replace("C:\\SPM\\futureversion", "C:\\"), true);
-                    }
-                    System.IO.Directory.Delete("C:\\SPM\\config", true);
-                    System.IO.Directory.Move("C:\\SPM\\config.old", "C:\\SPM\\config");
-                    Console.WriteLine("If this was a API breaking update (major update) it may break your configs");
+                    Console.WriteLine("====================================");
+
+                    if (System.IO.Directory.Exists("C:\\temp\\config.old")) System.IO.Directory.Delete("C:\\temp\\config.old", true);
+                    System.IO.Directory.Move("C:\\SPM\\config", "C:\\temp\\config.old");
+                    System.IO.Directory.Delete(@"C:\SPM", true);
+                    System.IO.Directory.Move("C:\\temp\\SPM", "C:\\SPM");
+                    System.IO.Directory.Delete(@"C:\SPM\config", true);
+                    System.IO.Directory.Move("C:\\temp\\config.old", "C:\\SPM\\config");
+                    Console.WriteLine("If this was an API breaking update (major update) it may break your configs");
                     Console.WriteLine("====================================");
                     Console.WriteLine("Update complete!");
+                    Console.WriteLine("====================================");
                     Console.ReadKey();
                 }
                 else
