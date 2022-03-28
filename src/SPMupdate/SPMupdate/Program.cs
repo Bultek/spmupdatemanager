@@ -63,11 +63,14 @@ namespace SPMupdateManager
                     Console.WriteLine("====================================");
 
                     if (System.IO.Directory.Exists("C:\\temp\\config.old")) System.IO.Directory.Delete("C:\\temp\\config.old", true);
+                    if (System.IO.Directory.Exists("C:\\temp\\modules.old")) System.IO.Directory.Delete("C:\\temp\\modules.old", true);
                     System.IO.Directory.Move("C:\\SPM\\config", "C:\\temp\\config.old");
+                    System.IO.Directory.Move("C:\\SPM\\modules", "C:\\temp\\modules.old");
                     System.IO.Directory.Delete(@"C:\SPM", true);
                     System.IO.Directory.Move("C:\\temp\\SPM", "C:\\SPM");
                     System.IO.Directory.Delete(@"C:\SPM\config", true);
                     System.IO.Directory.Move("C:\\temp\\config.old", "C:\\SPM\\config");
+                    System.IO.Directory.Move("C:\\temp\\modules.old", "C:\\SPM\\modules");
                     Console.WriteLine("If this was an API breaking update (major update) it may break your configs");
                     Console.WriteLine("====================================");
                     Console.WriteLine("Update complete!");
