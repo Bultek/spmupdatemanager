@@ -134,7 +134,7 @@ namespace SPMupdateManager
             {
                 if (System.IO.File.Exists(@"C:\SPM\config\UpdateUrl.txt"))
                 {
-                    string url = System.IO.File.ReadAllText(@"C:\SPM\config\updateurl.txt");
+                    string url = System.IO.File.ReadAllText(@"C:\SPM\config\UpdateUrl.txt");
                     if (url.Contains("!BRANCH"))
                     {
                         url = url.Replace("!BRANCH", Branch);
