@@ -28,7 +28,14 @@ namespace SPMupdateManager
                             System.IO.File.Delete("C:\\SPM.zip");
                         }
                         //Console.WriteLine("Downloading versions info...");
-                        tagdl.DownloadFile("http://repo.bultek.com.ua/SPM-BINARY/SPM-" + man.Branch + ".zip", "C:\\SPM.zip");
+                        if (man.DownloadURL != "DEFAULT")
+                        {
+                            tagdl.DownloadFile(man.DownloadURL, "C:\\SPM.zip");
+                        }
+                        else
+                        {
+                            tagdl.DownloadFile("http://repo.bultek.com.ua/SPM-BINARY/SPM-" + man.Branch + ".zip", "C:\\SPM.zip");
+                        }
                         // Param1 = Link of file
                         // Param2 = Path to save
                     }
@@ -103,6 +110,45 @@ namespace SPMupdateManager
     {
         public string Branch { get; set; }
         public int CurrentVersion { get; set; }
+
+        public string DownloadURL { get
+            {
+                if (System.IO.File.Exists(@"C:\SPM\config\UpdateDownloadURL.txt"))
+                {
+                    string contents = File.ReadAllText(@"C:\SPM\config\UpdateDownloadURL.txt");
+                    if (contents.Contains("!BRANCH"))
+                    {
+                        contents = contents.Replace("!BRANCH", Branch);
+                    }
+                    return contents;
+                }
+                else
+                {
+                    return "DEFAULT";
+                }
+            } 
+        }
+
+        public string UpdateURL {
+            get
+            {
+                if (System.IO.File.Exists(@"C:\SPM\config\UpdateUrl.txt"))
+                {
+                    string url = System.IO.File.ReadAllText(@"C:\SPM\config\updateurl.txt");
+                    if (url.Contains("!BRANCH"))
+                    {
+                        url = url.Replace("!BRANCH", Branch);
+                    }
+                    return url;
+                    
+                }
+                else
+                {
+                    return "https://gitlab.com/bultekdev/spm-projects/SharpPackageManager/-/raw/versioncontrol/" + Branch + ".spmvi";
+                }
+            } 
+        }
+
         public int LatestVersion
         {
 
@@ -112,7 +158,7 @@ namespace SPMupdateManager
                 if (System.IO.File.Exists("C:\\temp\\latestversiontag.spmvi")) System.IO.File.Delete("C:\\temp\\latestversiontag.spmsvi");
                 using (WebClient tagdl = new WebClient())
                 {
-                    tagdl.DownloadFile("https://gitlab.com/bultekdev/spm-projects/SharpPackageManager/-/raw/versioncontrol/" + Branch + ".spmvi", "C:\\temp\\latestversioninfo.spmvi");
+                    tagdl.DownloadFile(UpdateURL, "C:\\temp\\latestversioninfo.spmvi");
                     // Param1 = Link of file
                     // Param2 = Path to save
                 }
