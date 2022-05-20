@@ -144,7 +144,7 @@ namespace SPMupdateManager
                 }
                 else
                 {
-                    return "https://github.com/Bultek/SharpPackageManager/tree/versioncontrol/" + Branch + ".spmvi";
+                    return "https://github.com/Bultek/SharpPackageManager/raw/versioncontrol/"+Branch+".spmvi";
                 }
             } 
         }
